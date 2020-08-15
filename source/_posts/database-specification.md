@@ -4,7 +4,7 @@ date: 2017-03-29 03:07:06
 tags:
   - 数据库
   - 设计规范
-categories
+categories:
   - 数据库
 ---
 
