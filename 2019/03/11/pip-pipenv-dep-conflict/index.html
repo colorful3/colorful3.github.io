@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html lang="ch" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>pip、pipenv是如何处理包于包之间的版本冲突的？ - Colorful3 的博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Colorful3,"> 
+    <meta name="description" content="
+最近在开发我们团队的开源项目插件功能，遇到了一个比较棘手的问题。就是插件依赖的版本冲突问题。
+
+1. 插件的定义我们的项目是基于python的flask框架开发的一个前后端分离的CMS，我们对于插,"> 
+    <meta name="author" content="Colorful"> 
+    <link rel="alternative" href="atom.xml" title="Colorful3 的博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 5.0.2"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Colorful3 的博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://blog.colorful3.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">pip、pipenv是如何处理包于包之间的版本冲突的？</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">pip、pipenv是如何处理包于包之间的版本冲突的？</h1>
+        <div class="stuff">
+            <span>三月 11, 2019</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <blockquote>
+<p>最近在开发我们团队的<a target="_blank" rel="noopener" href="https://github.com/TaleLin/lin-cms-flask">开源项目</a>插件功能，遇到了一个比较棘手的问题。就是插件依赖的版本冲突问题。</p>
+</blockquote>
+<h2 id="1-插件的定义"><a href="#1-插件的定义" class="headerlink" title="1. 插件的定义"></a>1. 插件的定义</h2><p>我们的项目是基于python的flask框架开发的一个前后端分离的CMS，我们对于插件的定义是这样的：</p>
+<ul>
+<li>插件是围绕特定业务场景需求的一系列页面和资源的封装, 如: 日志系统, 推送系统, 电商系统等. 使用插件可快速进行对应业务场景的开发. 你也可以将自己业务中复用的部分开发为插件, 在 Lin CMS 平台与所有开发者进行共享, 或者仅内部进行共享.</li>
+<li>Lin CMS 插件有三类: <code>A型插件</code>, <code>B型插件</code>, <code>AB型插件</code>. 只涉及前端的插件为 <code>A型插件</code>，只涉及后端的插件为 <code>B型插件</code>，需要前后端对接 API 共同完成一个业务逻辑的插件为 <code>AB型插件</code>。</li>
+<li>后端插件的定义，插件不同于flask的扩展，扩展是通过pip命令从pypi安装到项目的<strong>site_packages</strong>目录下面的包。而我们开源项目所谓的插件是基于Lin-CMS的开发规范，为了实现某一特定业务功能或模块的一系列页面或者资源的封装。随着项目的推进，会开发出越来越多适合于各种场景的优秀插件提供给开发者使用。</li>
+</ul>
+<p>如果想了解更多Lin-CMS的插件相关知识，请阅读我们的官方<a target="_blank" rel="noopener" href="http://doc.cms.7yue.pro/lin/plugins/">文档</a></p>
+<h2 id="2-为什么会产生版本冲突"><a href="#2-为什么会产生版本冲突" class="headerlink" title="2. 为什么会产生版本冲突"></a>2. 为什么会产生版本冲突</h2><p>为了最大程度上适应不同开发者开发的<strong>不同功能、不同依赖</strong>的插件，我们Lin CMS主项目在加载这些插件的时候必须比较好的处理这些依赖间的关系，也就是处理版本冲突。</p>
+<p>版本冲突主要有两种情况。</p>
+<ol>
+<li>插件与主项目之间的依赖冲突。由于Lin-CMS本身需要安装一些必要的依赖，如flask、flask-JWT这些依赖，那么我们不能保证插件的开发者在插件开发中没有引用这些依赖。版本冲突不可避免。</li>
+<li>插件与插件之间的依赖冲突。由于插件与插件的开发者不同，开发的不同插件也可能引用不同版本的依赖，那么如果依赖间发生冲突，如何取舍，这也是一个问题。</li>
+</ol>
+<h2 id="3-解决版本冲突的方案有哪些？"><a href="#3-解决版本冲突的方案有哪些？" class="headerlink" title="3. 解决版本冲突的方案有哪些？"></a>3. 解决版本冲突的方案有哪些？</h2><p>为了解决依赖的版本冲突问题，我们团队开会讨论得出结构，得到了一下几种解决方案。</p>
+<ol>
+<li>每一个插件发布成pip包。然pip内部处理依赖的冲突问题。</li>
+<li>无论什么时候，都取最高版本的依赖安装。</li>
+<li>发生冲突后不安装，提示错误，用户处理。</li>
+</ol>
+<p>方案一如果发布成了pip包，就失去了我们去做插件的本意，pip包的定义以及开发规范与我们插件完全不同，不可取。</p>
+<p>方案二，安装最高版本，如果有一些插件的自身或者主项目的依赖版本没有及时更新，我们安装依赖发生冲突的时候，就选择最高版本去安装，新版本的依赖就会覆盖旧版本的依赖，我们无法确定依赖的更新内容，可能会导致之前的依赖不能使用甚至主项目不能使用。插件是挂载在主项目上的，如果主项目发生问题，对于开发者来说，处理起来可能非常棘手。</p>
+<p>那么就只剩下方案三了，这种处理方法相对比较合理，因为pip本身也无法处理依赖的冲突问题，采取的是同样的方法。pip官方文档解释如下(pip没有真正的依赖解析机制)：</p>
+<p><img src="https://www.colorful3.com/wp-content/uploads/2019/03/image.png" alt="img"></p>
+<h2 id="4-解决前的机制的研究"><a href="#4-解决前的机制的研究" class="headerlink" title="4. 解决前的机制的研究"></a>4. 解决前的机制的研究</h2><p>我们最终选取了方案三来解决这个问题。那么问题来了，如何取解决这个问题呢？</p>
+<h3 id="4-1-pip安装依赖的机制"><a href="#4-1-pip安装依赖的机制" class="headerlink" title="4.1 pip安装依赖的机制"></a>4.1 pip安装依赖的机制</h3><p>首先，我们测试了pip的安装依赖机制。</p>
+<p>pip list 查看环境中已安装的依赖</p>
+<p><img src="https://www.colorful3.com/wp-content/uploads/2019/03/image-2.png" alt="img"></p>
+<p>选取flask依赖为测试案例，我们的主项目基于 flask 1.0.2，不支持更低的版本。为了测试安装插件依赖的实际场景，开发插件的开发者可能会安装flask的低版本，所以执行 pip install Flask==0.11</p>
+<p><img src="https://www.colorful3.com/wp-content/uploads/2019/03/image-3-1024x367.png" alt="img"></p>
+<p>安装结果如上图，红字显示报错信息：<em>lin-cms 指定了flask==1.0.2，但是你将会安装的flask 0.11 是不兼容的。</em>可是在最后我们发现，flask 0.11还是成功地安装到了我们的环境当中。使用pip list查看版本，已经成功安装。</p>
+<p><img src="https://www.colorful3.com/wp-content/uploads/2019/03/WX20190311-185556.png" alt="img"></p>
+<p>那么pip的机制是：在版本冲突的情况下，虽然会报错，但是已经成功会安装。如果这个时候运行你的项目，会发生不可设想的错误。</p>
+<p>我们要做的是阻止pip进行安装，但pip却给成功安装并覆盖了之前的根项目要求的版本。这个是一个<strong>待解决的问题</strong></p>
+<p>上面我们测试了flask的安装，flask是Lin-CMS一级依赖(top-dependtence)，那么在安装Lin-CMS所依赖的子依赖（sub-depentence）时，pip的处理机制是什么呢。（<strong>由于pip下无法查看依赖关系，我们使用pipenv graph查看依赖关系。 flask 1.0.2依赖如下</strong>）</p>
+<p><img src="https://www.colorful3.com/wp-content/uploads/2019/03/image-4.png" alt="img"></p>
+<p>我们以click为测试案例，click作为flask依赖的依赖，被要求版本必须大于等于5.1，现在环境下的版本为7.0。我们使用 pip install click==4.1 来安装不符合依赖要求的版本。</p>
+<p><img src="https://www.colorful3.com/wp-content/uploads/2019/03/WX20190311-191958.png" alt="img"></p>
+<p>同样的，安装过程中报错：flask 1.0.2 要求click 大于登录 5.1，但是你将安装的click 4.1 是不兼容的。但是依然安装成功。</p>
+<p>现在恢复click的版本为7.0，使用pip install click是行不通的，必须在click后面加上版本号才可以行得通。如下图所示：</p>
+<p><img src="https://www.colorful3.com/wp-content/uploads/2019/03/WX20190311-192639-1024x206.png" alt="img"></p>
+<h3 id="4-2-pipenv安装依赖的机制"><a href="#4-2-pipenv安装依赖的机制" class="headerlink" title="4.2 pipenv安装依赖的机制"></a>4.2 pipenv安装依赖的机制</h3><p>在得出pip安装依赖的机制后，我们使用最几年很火的python包管理工具pipenv来测试pipenv是如何安装依赖的。</p>
+<p>和上面的测试pip的部分相同，我们同样在项目的根目录下首先安装flask 0.11。</p>
+<p>先查看当前的pipfile</p>
+<p><img src="https://www.colorful3.com/wp-content/uploads/2019/03/image-5.png" alt="img"></p>
+<p>执行 pipenv install flask==0.11</p>
+<p><img src="https://www.colorful3.com/wp-content/uploads/2019/03/image-6-1024x640.png" alt="img"></p>
+<p>查看上图中的安装堆栈，画出红线的部分报错：安装失败，其原因是 在分析依赖的时候有版本冲突。再次查看pipfile，flask 0.11 已经被安装到了环境当中。</p>
+<p><img src="https://www.colorful3.com/wp-content/uploads/2019/03/WX20190311-224348.png" alt="img"></p>
+<p>在这里，使用pipenv安装有冲突的依赖和使用pip安装有冲突的依赖报错是一样的。</p>
+<p>重复pip做过的第二部，也就是安装sub-dependence click，执行pipenv install click==4.1</p>
+<p><img src="https://www.colorful3.com/wp-content/uploads/2019/03/WX20190311-225122-1024x640.png" alt="img"></p>
+<p>果然，结果不出所料。pipenv会给我们报错同样的错误，但也会成功把指定依赖的版本安装到系统中。</p>
+<h3 id="4-3-对比后的结论"><a href="#4-3-对比后的结论" class="headerlink" title="4.3 对比后的结论"></a>4.3 对比后的结论</h3><p>在经过上述一系列的分析后，我们得到结论：pip和pipenv有相同的机制，也就是，当我们向环境中安装有依赖冲突的依赖时，无论是一级依赖（top-dependence）还是子依赖（sub-dependence）,pip和pipenv都会告诉我们，你所安装的依赖有不兼容问题，但是他们之后都会成功安装到环境中，需要我们手动恢复到合法的依赖版本。</p>
+<p><img src="https://www.colorful3.com/wp-content/uploads/2019/03/51500430_344672386141482_3692248478808980093_n-819x1024.jpg" alt="img"></p>
+<h2 id="最终解决"><a href="#最终解决" class="headerlink" title="最终解决"></a>最终解决</h2><p>好了，机制我们已经了解，处理方法也已经确定，我们现在来实现插件依赖冲突的代码。</p>
+<p>在这里，我们可以使用pip的输出结果来判断。也可以使用pipenv的输出结果来判断，但是无论使用什么输出结果作为标准，无法避免得，不合法的版本都会被安装到环境中，这个结果并不是我们想要的。在插件过多的时候，反复安装和卸载包会出现效率的问题，所以，我们决定自己写脚本来判断其依赖关系。</p>
+<p>判断依赖关系最好的方法就是使用pipenv graph得到所有的依赖的关系，使用python脚本来分析文本。与插件的依赖进行对比，得到最终要安装的版本，如果不合法，直接停止插件的初始化，抛出一个异常，详细告诉用户某个插件的依赖版本不合法。与跟项目的依赖产生了冲突，省去了先去安装得到错误提示再去卸载这一步过程。在插件的依赖与根目录的依赖是否有冲突的判断通过后（也就是没有冲突），那么分析插件与插件的依赖之间会不会有冲突。给出相应的提示。如果有冲突，只能提示给用户，让用户自己取舍了。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='2' data-url='https://link.hhtjim.com/163/381849.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class='side'>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%8F%92%E4%BB%B6%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.</span> <span class="toc-text">1. 插件的定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E4%BA%A7%E7%94%9F%E7%89%88%E6%9C%AC%E5%86%B2%E7%AA%81"><span class="toc-number">2.</span> <span class="toc-text">2. 为什么会产生版本冲突</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%A7%A3%E5%86%B3%E7%89%88%E6%9C%AC%E5%86%B2%E7%AA%81%E7%9A%84%E6%96%B9%E6%A1%88%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">3. 解决版本冲突的方案有哪些？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%A7%A3%E5%86%B3%E5%89%8D%E7%9A%84%E6%9C%BA%E5%88%B6%E7%9A%84%E7%A0%94%E7%A9%B6"><span class="toc-number">4.</span> <span class="toc-text">4. 解决前的机制的研究</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-pip%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96%E7%9A%84%E6%9C%BA%E5%88%B6"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 pip安装依赖的机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-pipenv%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96%E7%9A%84%E6%9C%BA%E5%88%B6"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 pipenv安装依赖的机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%AF%B9%E6%AF%94%E5%90%8E%E7%9A%84%E7%BB%93%E8%AE%BA"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 对比后的结论</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E7%BB%88%E8%A7%A3%E5%86%B3"><span class="toc-number">5.</span> <span class="toc-text">最终解决</span></a></li></ol>	
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
