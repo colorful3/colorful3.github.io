@@ -24,6 +24,7 @@ cover:
 ## 3、不怕失败
 3、不怕失败，我身边有好多朋友在去野球场打球的时候，一旦碰到天赋、技术比较好的对手，就会打退堂鼓，甚至不敢上场比赛。一方面是因为缺乏自信心，另一方面也是因为害怕失败，在这里我想说：别怕失败，大不了重新来过。
 
+![](http://img.colorful3.com/basketball1.png)
+
 视频连接：[https://www.bilibili.com/video/BV1jN411o7am/](https://www.bilibili.com/video/BV1jN411o7am/)
-<iframe height=600 width=800 src="https://www.bilibili.com/video/BV1jN411o7am/" frameborder=0 allowfullscreen>
 ￼
