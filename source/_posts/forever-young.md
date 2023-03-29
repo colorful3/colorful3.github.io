@@ -28,7 +28,7 @@ mp3: https://link.hhtjim.com/163/439139384.mp3
 …
 …
 
-![img](http://blog.colorful3.com/2019/04/02/FoerverYoung/9655A3FA5B66C1CDFC9B6233BE6C7C4F.png)
+![img](http://blog.colorful3.com/2019/04/12/forever-young/9655A3FA5B66C1CDFC9B6233BE6C7C4F.png)
 
 2014年 于 大学校园
 
@@ -51,34 +51,34 @@ mp3: https://link.hhtjim.com/163/439139384.mp3
 我们上一届学长的篮球水平较高，基本上球都是和他们一起打的，如今回到学校，陪着打篮球的都是学弟，已经没有了当年那种必胜的心气儿。不知是不是我存有偏见，自从学长们离开后，校园里再也找不到那种让你欣赏的球技了。对篮球的**激情依然还在**，但迫于工作，已经不比当年。
 下面是我最近投篮的小视频，体重已经高达150斤。O__O “… 要减肥了…
 
-<video src="http://blog.colorful3.com/2019/04/02/FoerverYoung/DE830B3510FD7C8F6A272433A8423896.mp4" type="video/mp4" controls="controls" width="100%" height="500px"></video>
+<video src="http://blog.colorful3.com/2019/04/12/forever-young/DE830B3510FD7C8F6A272433A8423896.mp4" type="video/mp4" controls="controls" width="100%" height="500px"></video>
 
  
 
-<video src="http://blog.colorful3.com/2019/04/02/FoerverYoung/video.mp4" type="video/mp4" controls="controls" width="100%" height="500px"></video>
+<video src="http://blog.colorful3.com/2019/04/12/forever-young/video.mp4" type="video/mp4" controls="controls" width="100%" height="500px"></video>
 
 下面是我找到的大学时候的一些和篮球相关的照片，那个时候体重只有120斤。回想起来，当初真的是灵动。
 
-![img](http://blog.colorful3.com/2019/04/02/FoerverYoung/FCC50F34AD76620AA16A28C0B513E4B2.png)
+![img](http://blog.colorful3.com/2019/04/12/forever-young/FCC50F34AD76620AA16A28C0B513E4B2.png)
 大学时候的腕带 I will be back 这句话是当年麦迪在输给小牛的发布会上说的
 
-![img](http://blog.colorful3.com/2019/04/02/FoerverYoung/9F7842B1065F8E66CF6C44E8D3B954A8.png)
+![img](http://blog.colorful3.com/2019/04/12/forever-young/9F7842B1065F8E66CF6C44E8D3B954A8.png)
 这句话是一句自嘲的话，意思是你就是个垃圾，希望激励我不断进步
 
-![img](http://blog.colorful3.com/2019/04/02/FoerverYoung/11BFFBCC6971CEA621DBA91891C0622A.png)
+![img](http://blog.colorful3.com/2019/04/12/forever-young/11BFFBCC6971CEA621DBA91891C0622A.png)
 晚上在球场练篮球
 
-![img](http://blog.colorful3.com/2019/04/02/FoerverYoung/99B4F69D3112B5286AF1C20E73610A18.png)
+![img](http://blog.colorful3.com/2019/04/12/forever-young/99B4F69D3112B5286AF1C20E73610A18.png)
 和大飞单挑留下来的视频截图（视频已经丢了）
 
-![img](http://blog.colorful3.com/2019/04/02/FoerverYoung/287E82B4D289C3AD16AF77494A79E607.png)
+![img](http://blog.colorful3.com/2019/04/12/forever-young/287E82B4D289C3AD16AF77494A79E607.png)
 
-![img](http://blog.colorful3.com/2019/04/02/FoerverYoung/8427D9A534CA8C5D287E3A4CD3BBD731.png)
+![img](http://blog.colorful3.com/2019/04/12/forever-young/8427D9A534CA8C5D287E3A4CD3BBD731.png)
 
 宿舍墙上贴着我偶像的海报，毕业那天我是最后走的，先把舍友的书都卖废品了，最后一次打扫宿舍，然后自己坐在床上，面对这艾弗森的巨幅海报，百感交集，我沉思了许久。不禁感叹岁月易逝。我纠结了好久，要不要把偶像的海报揭下来带走，最后还是决定让他留在墙上，我的大学生涯也已宣告结束。
 
 另外，我还要感谢大学时候的舍友**大飞**，谢谢你，在大一大二，陪我打了两年的篮球。当然，也感谢我大学的其他五个舍友，忍受了我每次打篮球回来的臭脚丫子。下面是我用当时一个特别火的软件（忘了名字）做的我们宿舍六个人的头像，那个**妥妥的**，就是大飞。
-![img](http://blog.colorful3.com/2019/04/02/FoerverYoung/79895C44-58A9-43C9-B596-32DEE77A119A.png)
+![img](http://blog.colorful3.com/2019/04/12/forever-young/79895C44-58A9-43C9-B596-32DEE77A119A.png)
 制作于 2014年6月
 
 ### 坚持
@@ -96,13 +96,13 @@ mp3: https://link.hhtjim.com/163/439139384.mp3
 ### 遇见佛教
 
 大概在我初中的时候，母亲开始接触并信仰佛教。但那个时候我对佛教并不了解，但对佛教向来都有一种敬畏之心，随着母亲一起去寺庙，去拜佛，也不知道到底是为了什么，但我并不反感，现在回想起来可能有两个原因，一点是寺庙那种庄严的气氛，仿佛每个人在那种环境下身心都变得清静，连说话的语调都变得平缓；另外一点就是我对母亲的孝心，因为我随着她去的时候，她会非常开心。
-![img](http://blog.colorful3.com/2019/04/02/FoerverYoung/6FCF9BA378793EC02D41BF61A8AFBC7C.png)
+![img](http://blog.colorful3.com/2019/04/12/forever-young/6FCF9BA378793EC02D41BF61A8AFBC7C.png)
 拍摄于 2013年 五台山 南台
 
-![img](http://blog.colorful3.com/2019/04/02/FoerverYoung/56428E91022877B1D67207E8E0AFA76B.png)
+![img](http://blog.colorful3.com/2019/04/12/forever-young/56428E91022877B1D67207E8E0AFA76B.png)
 拍摄于 2014年 峨眉山 万年寺
 
-![img](http://blog.colorful3.com/2019/04/02/FoerverYoung/4B8E00A86A0DC444740F94CD00DB86A8.png)
+![img](http://blog.colorful3.com/2019/04/12/forever-young/4B8E00A86A0DC444740F94CD00DB86A8.png)
 佛前供灯 拍摄于 抚宁慈恩禅寺
 
 直到我上了大学，我开始真正的认识佛教并学习佛教的知识。
