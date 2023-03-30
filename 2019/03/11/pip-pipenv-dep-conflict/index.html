@@ -72,7 +72,7 @@
 <li>Lin CMS 插件有三类: <code>A型插件</code>, <code>B型插件</code>, <code>AB型插件</code>. 只涉及前端的插件为 <code>A型插件</code>，只涉及后端的插件为 <code>B型插件</code>，需要前后端对接 API 共同完成一个业务逻辑的插件为 <code>AB型插件</code>。</li>
 <li>后端插件的定义，插件不同于flask的扩展，扩展是通过pip命令从pypi安装到项目的<strong>site_packages</strong>目录下面的包。而我们开源项目所谓的插件是基于Lin-CMS的开发规范，为了实现某一特定业务功能或模块的一系列页面或者资源的封装。随着项目的推进，会开发出越来越多适合于各种场景的优秀插件提供给开发者使用。</li>
 </ul>
-<p>如果想了解更多Lin-CMS的插件相关知识，请阅读我们的官方<a target="_blank" rel="noopener" href="http://doc.cms.7yue.pro/lin/plugins/">文档</a></p>
+<p>如果想了解更多Lin-CMS的插件相关知识，请阅读我们的官方<a target="_blank" rel="noopener" href="http://doc.cms.talein.com/lin/plugins/">文档</a></p>
 <h2 id="2-为什么会产生版本冲突"><a href="#2-为什么会产生版本冲突" class="headerlink" title="2. 为什么会产生版本冲突"></a>2. 为什么会产生版本冲突</h2><p>为了最大程度上适应不同开发者开发的<strong>不同功能、不同依赖</strong>的插件，我们Lin CMS主项目在加载这些插件的时候必须比较好的处理这些依赖间的关系，也就是处理版本冲突。</p>
 <p>版本冲突主要有两种情况。</p>
 <ol>
