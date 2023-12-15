@@ -13,7 +13,7 @@ timezone: ''
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://blog.colorful3.com
+url: http://blog.colorful3.com
 # url: https://colorful3.github.io
 root: /
 permalink: :year/:month/:day/:title/
@@ -103,13 +103,30 @@ theme: diaspora
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
+# deploy:
+#   type: git
+#   repo: https://github.com/colorful3/colorful3.github.io
+#   branch: master
+
 deploy:
-  type: git
-  repo: https://github.com/colorful3/colorful3.github.io
-  branch: master
+  type: rsync
+  host: 47.103.153.50
+  user: root
+  root: /home/work/blog
 
 search:
   path: search.xml
   field: post
   format: html
   limit: 10000
+
+# hexo-hide-posts
+hide_posts:
+  # 可以改成其他你喜欢的名字
+  filter: hidden
+  # 指定你想要传递隐藏文章的位置，比如让所有隐藏文章在存档页面可见
+  # 常见的位置有：index, tag, category, archive, sitemap, feed, etc.
+  # 留空则默认全部隐藏
+  public_generators: []
+  # 为隐藏的文章添加 noindex meta 标签，阻止搜索引擎收录
+  noindex: true
