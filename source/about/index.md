@@ -30,5 +30,5 @@ I have two hobbies, One is computer technology, the other is basketball.
 
 And more, I am passionate about charity, and I sincerely hope that everyone in my life will truly believe that achieving others is to achieve myself.
 
-> ![img](http://img.colorful3.com/blog/2023/2023.jpeg)
-> 二零二三 年三十 拍摄于 湖北武汉
+> ![img](http://img.colorful3.com/blog/2024/IMG_8725.jpg)
+> 二零二四年 一月 拍摄于 三亚湾
